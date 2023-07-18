@@ -12,8 +12,6 @@ import MovieDetails from "./components/MovieDetails";
 import WatchedSummary from "./components/WatchedSummary";
 import WatchedMovieList from "./components/WatchedMovieList";
 
-const KEY = "c7fc08cd";
-
 function App() {
   const [query, setQuery] = useState("");
   const [movies, setMovies] = useState([]);
@@ -45,7 +43,7 @@ function App() {
           setIsLoading(true);
 
           const res = await fetch(
-            `http://www.omdbapi.com/?apikey=${KEY}&s=${query}`,
+            `http://www.omdbapi.com/?apikey=c7fc08cd&s=${query}`,
             { signal: controller.signal }
           );
 
@@ -58,6 +56,9 @@ function App() {
           setMovies(data.Search);
           setError("");
         } catch (err) {
+          if (err.name !== "AbortError") {
+            setError(err.message);
+          }
           setError(err.message);
         } finally {
           setIsLoading(false);
