@@ -1,4 +1,7 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
+
+import { useMovie } from "./components/useMovie";
+import { useLocalStorage } from "./components/useLocalStorage";
 
 import NavBar from "./components/NavBar";
 import SearchBar from "./components/SearchBar";
@@ -14,11 +17,10 @@ import WatchedMovieList from "./components/WatchedMovieList";
 
 function App() {
   const [query, setQuery] = useState("");
-  const [movies, setMovies] = useState([]);
-  const [watched, setWatched] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
   const [selectedId, setSelectedId] = useState(null);
+
+  const { movies, isLoading, error } = useMovie(query);
+  const [watched, setWatched] = useLocalStorage([], "watched");
 
   function handleSelectedId(id) {
     setSelectedId((selectedId) => (selectedId === id ? null : id));
@@ -33,52 +35,6 @@ function App() {
     setWatched((watched) => watched.filter((movie) => movie.imdbID !== id));
   }
 
-  useEffect(
-    function () {
-      const controller = new AbortController();
-
-      async function fetchMovies() {
-        try {
-          setError("");
-          setIsLoading(true);
-
-          const res = await fetch(
-            `http://www.omdbapi.com/?apikey=c7fc08cd&s=${query}`,
-            { signal: controller.signal }
-          );
-
-          if (!res.ok) throw new Error("NETWORK CONNECTION ERROR");
-
-          const data = await res.json();
-
-          if (data.Response === "False") throw new Error("MOVIE NOT FOUND!");
-
-          setMovies(data.Search);
-          setError("");
-        } catch (err) {
-          if (err.name !== "AbortError") {
-            setError(err.message);
-          }
-          setError(err.message);
-        } finally {
-          setIsLoading(false);
-        }
-      }
-      if (query.length < 3) {
-        setError("");
-        setMovies([]);
-        return;
-      }
-      handleCloseMovie();
-      fetchMovies();
-
-      return function () {
-        controller.abort();
-      };
-    },
-    [query]
-  );
-
   return (
     <>
       <NavBar>
@@ -88,10 +44,10 @@ function App() {
 
       <Main>
         <Box>
-          {error ? (
-            <ErrorMessage message={error} />
-          ) : isLoading ? (
+          {isLoading ? (
             <Loader />
+          ) : error ? (
+            <ErrorMessage message={error} />
           ) : (
             <MovieList onSelectedId={handleSelectedId} movies={movies} />
           )}
