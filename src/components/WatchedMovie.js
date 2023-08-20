@@ -18,13 +18,13 @@ function WatchedMovie({ movie, onDeleteWatched }) {
         </p>
         <button
           onClick={() => onDeleteWatched(movie.imdbID)}
-          className="btn-delete"
+          className='btn-delete'
         >
           X
         </button>
       </div>
     </li>
-  );
+  )
 }
 
-export default WatchedMovie;
+export default WatchedMovie

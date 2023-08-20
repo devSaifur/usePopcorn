@@ -1,47 +1,47 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react'
 
 export function useMovie(query) {
-  const [movies, setMovies] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [movies, setMovies] = useState([])
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState('')
 
   useEffect(() => {
-    const controller = new AbortController();
+    const controller = new AbortController()
 
     async function fetchMovies() {
       try {
-        setError("");
-        setIsLoading(true);
+        setError('')
+        setIsLoading(true)
 
         const res = await fetch(
           `http://www.omdbapi.com/?apikey=c7fc08cd&s=${query}`,
           { signal: controller.signal }
-        );
-        if (!res.ok) throw new Error("NETWORK CONNECTION ERROR");
-        const data = await res.json();
+        )
+        if (!res.ok) throw new Error('NETWORK CONNECTION ERROR')
+        const data = await res.json()
 
-        if (data.Response === "False") throw new Error("MOVIE NOT FOUND!");
-        setMovies(data.Search);
-        setError("");
+        if (data.Response === 'False') throw new Error('MOVIE NOT FOUND!')
+        setMovies(data.Search)
+        setError('')
       } catch (err) {
-        if (err.name !== "AbortError") {
-          setError(err.message);
+        if (err.name !== 'AbortError') {
+          setError(err.message)
         }
-        setError(err.message);
+        setError(err.message)
       } finally {
-        setIsLoading(false);
+        setIsLoading(false)
       }
     }
     if (query.length < 3) {
-      setError("");
-      setMovies([]);
-      return;
+      setError('')
+      setMovies([])
+      return
     }
     // handleCloseMovie();
-    fetchMovies();
+    fetchMovies()
     return function () {
-      controller.abort();
-    };
-  }, [query]);
-  return { movies, isLoading, error };
+      controller.abort()
+    }
+  }, [query])
+  return { movies, isLoading, error }
 }

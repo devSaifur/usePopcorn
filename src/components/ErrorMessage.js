@@ -1,5 +1,5 @@
 function ErrorMessage({ message }) {
-  return <p className="error">{message}</p>;
+  return <p className='error'>{message}</p>
 }
 
-export default ErrorMessage;
+export default ErrorMessage

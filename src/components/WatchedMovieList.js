@@ -1,8 +1,8 @@
-import WatchedMovie from "./WatchedMovie";
+import WatchedMovie from './WatchedMovie'
 
 function WatchedMovieList({ watched, onAddMovie, onDeleteWatched }) {
   return (
-    <ul className="list">
+    <ul className='list'>
       {watched.map((movie) => (
         <WatchedMovie
           movie={movie}
@@ -12,7 +12,7 @@ function WatchedMovieList({ watched, onAddMovie, onDeleteWatched }) {
         />
       ))}
     </ul>
-  );
+  )
 }
 
-export default WatchedMovieList;
+export default WatchedMovieList

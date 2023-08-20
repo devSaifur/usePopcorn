@@ -10,7 +10,7 @@ function Movie({ movie, onSelectedId }) {
         </p>
       </div>
     </li>
-  );
+  )
 }
 
-export default Movie;
+export default Movie
