@@ -32,7 +32,7 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
     Released: released,
     Actors: actors,
     Director: director,
-    Genre: genre,
+    Genre: genre
   } = movie
 
   function handleAdd() {
@@ -44,7 +44,7 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
       imdbRating: Number(imdbRating),
       runtime: Number(runtime.split(' ').at(0)),
       userRating,
-      countRatingDecisions: countRef.current,
+      countRatingDecisions: countRef.current
     }
     onAddWatched(newWatchedMovie)
     onCloseMovie()
@@ -57,9 +57,7 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
       async function gerMovieDetails() {
         try {
           setIsLoading(true)
-          const res = await fetch(
-            `http://www.omdbapi.com/?apikey=c7fc08cd&i=${selectedId}`
-          )
+          const res = await fetch(`${process.env.OMDB_API_KEY}=${selectedId}`)
           const data = await res.json()
           setMovie(data)
         } catch (err) {
